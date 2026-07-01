@@ -10,8 +10,10 @@ scoreboard players operation X fr.z0rillac.sawrc.temp = dist fr.z0rillac.sawrc.t
 scoreboard players operation X fr.z0rillac.sawrc.temp *= py fr.z0rillac.sawrc.temp
 scoreboard players operation X fr.z0rillac.sawrc.temp /= scale fr.z0rillac.sawrc.temp
 scoreboard players operation X fr.z0rillac.sawrc.temp *= pz fr.z0rillac.sawrc.temp
+scoreboard players operation X fr.z0rillac.sawrc.temp /= scale fr.z0rillac.sawrc.temp
 
 scoreboard players operation incX fr.z0rillac.sawrc.temp = py fr.z0rillac.sawrc.temp
 scoreboard players operation incX fr.z0rillac.sawrc.temp *= pz fr.z0rillac.sawrc.temp
+scoreboard players operation incX fr.z0rillac.sawrc.temp /= scale fr.z0rillac.sawrc.temp
 
 scoreboard players operation limitX fr.z0rillac.sawrc.temp = limit fr.z0rillac.sawrc.temp

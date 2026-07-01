@@ -51,7 +51,8 @@
 ## This should be externalized at load time.
 scoreboard objectives add fr.z0rillac.sawrc.temp dummy
 scoreboard players set -1 fr.z0rillac.sawrc.temp -1
-scoreboard players set scale fr.z0rillac.sawrc.temp 8192
+scoreboard players set scale fr.z0rillac.sawrc.temp 46340
+scoreboard players set range_scale fr.z0rillac.sawrc.temp 16
 
 ## This should be externalized at load time. You must ensure that this entity is available and unique, by for example, using a forceloaded chunk.
 # Simple direct referenceable marker
@@ -61,9 +62,9 @@ summon marker ~ ~ ~ {UUID:[I;-1427772814,-107917963,-1643635647,588176524]}
 ## This is the recommended way to provide the raycast parameters.
 # unit vector $dx, $dy, $dz
 execute at @s positioned 0.0 0.0 0.0 run tp aae5ea72-f991-4d75-9e08-1c41230edc8c ^ ^ ^1
-execute store result score $dx fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[0] 8192
-execute store result score $dy fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[1] 8192
-execute store result score $dz fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[2] 8192
+execute store result score $dx fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[0] 46340
+execute store result score $dy fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[1] 46340
+execute store result score $dz fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[2] 46340
 # floor initial position $ix, $iy, $iz
 execute at @s anchored eyes positioned ^ ^ ^ align xyz run tp aae5ea72-f991-4d75-9e08-1c41230edc8c ~ ~ ~
 execute store result score $ix fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[0] 1
@@ -74,11 +75,12 @@ execute store result storage fr.z0rillac.sawrc:temp x double -1 run scoreboard p
 execute store result storage fr.z0rillac.sawrc:temp y double -1 run scoreboard players get $iy fr.z0rillac.sawrc.temp
 execute store result storage fr.z0rillac.sawrc:temp z double -1 run scoreboard players get $iz fr.z0rillac.sawrc.temp
 execute at @s anchored eyes positioned ^ ^ ^ as aae5ea72-f991-4d75-9e08-1c41230edc8c run function fr.z0rillac.sawrc:raycast/help_offset with storage fr.z0rillac.sawrc:temp
-execute store result score $ox fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[0] 8192
-execute store result score $oy fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[1] 8192
-execute store result score $oz fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[2] 8192
+execute store result score $ox fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[0] 46340
+execute store result score $oy fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[1] 46340
+execute store result score $oz fr.z0rillac.sawrc.temp run data get entity aae5ea72-f991-4d75-9e08-1c41230edc8c Pos[2] 46340
 # max distance $max_distance
-execute store result score $max_distance fr.z0rillac.sawrc.temp run attribute @s block_interaction_range get
+execute store result score $max_distance fr.z0rillac.sawrc.temp run attribute @s block_interaction_range get 16
+scoreboard players set $max_distance fr.z0rillac.sawrc.temp 4096
 
 ## Algorithm logic
 # path
@@ -107,11 +109,13 @@ execute if score ady fr.z0rillac.sawrc.temp matches 0 run scoreboard players set
 execute if score adz fr.z0rillac.sawrc.temp matches 0 run scoreboard players set pz fr.z0rillac.sawrc.temp 1
 
 # limit
-scoreboard players operation limit fr.z0rillac.sawrc.temp = $max_distance fr.z0rillac.sawrc.temp
-scoreboard players operation limit fr.z0rillac.sawrc.temp *= px fr.z0rillac.sawrc.temp
+scoreboard players operation limit fr.z0rillac.sawrc.temp = px fr.z0rillac.sawrc.temp
 scoreboard players operation limit fr.z0rillac.sawrc.temp *= py fr.z0rillac.sawrc.temp
 scoreboard players operation limit fr.z0rillac.sawrc.temp /= scale fr.z0rillac.sawrc.temp
 scoreboard players operation limit fr.z0rillac.sawrc.temp *= pz fr.z0rillac.sawrc.temp
+scoreboard players operation limit fr.z0rillac.sawrc.temp /= scale fr.z0rillac.sawrc.temp
+scoreboard players operation limit fr.z0rillac.sawrc.temp *= $max_distance fr.z0rillac.sawrc.temp
+scoreboard players operation limit fr.z0rillac.sawrc.temp /= range_scale fr.z0rillac.sawrc.temp
 
 # steps
 execute if score adx fr.z0rillac.sawrc.temp matches 0 run function fr.z0rillac.sawrc:raycast/if_x_parallel
